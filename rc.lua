@@ -14,6 +14,8 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
+-- Dropdown Terminal
+--local dropdownterm = require("scratchdrop")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
@@ -48,10 +50,14 @@ end
 beautiful.init(gears.filesystem.get_configuration_dir() .. "themes/solbn/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xterm"
+terminal = "xterm" or "urxvtc"
+terminal_quake = terminal .. " -title scratchy" 
 editor = "vim" or os.getenv("EDITOR") or "nano"
 editor_cmd = terminal .. " -e " .. editor
 lock = "/home/ben/bin/lock.sh"
+vol_mute = "/home/ben/bin/vol.sh -m"
+vol_up = "/home/ben/bin/vol.sh -u"
+vol_down = "/home/ben/bin/vol.sh -d"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -283,6 +289,24 @@ globalkeys = gears.table.join(
      awful.key({ modkey }, "b", function ()
        mouse.screen.mywibox.visible = not mouse.screen.mywibox.visible
      end),
+     -- Dropdown terminal
+     awful.key({ modkey,          }, "asciicircum", function () dropdownterm(terminal_quake) end),
+     -- Volume
+     awful.key({ modkey }, "less",
+       function ()
+         awful.util.spawn(vol_mute)
+         --volumewidget.update()
+       end),
+     awful.key({ modkey }, "y",
+      function ()
+        awful.util.spawn(vol_down)
+        --volumewidget.update()
+       end),
+     awful.key({ modkey }, "x",
+       function ()
+         awful.util.spawn(vol_up)
+         --volumewidget.update()
+     end),
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
@@ -325,16 +349,16 @@ globalkeys = gears.table.join(
     awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),
 
-    awful.key({ modkey }, "x",
-              function ()
-                  awful.prompt.run {
-                    prompt       = "Run Lua code: ",
-                    textbox      = awful.screen.focused().mypromptbox.widget,
-                    exe_callback = awful.util.eval,
-                    history_path = awful.util.get_cache_dir() .. "/history_eval"
-                  }
-              end,
-              {description = "lua execute prompt", group = "awesome"}),
+    --awful.key({ modkey }, "x",
+    --          function ()
+    --              awful.prompt.run {
+    --                prompt       = "Run Lua code: ",
+    --                textbox      = awful.screen.focused().mypromptbox.widget,
+    --                exe_callback = awful.util.eval,
+    --                history_path = awful.util.get_cache_dir() .. "/history_eval"
+    --              }
+    --          end,
+    --          {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"})
@@ -503,6 +527,14 @@ awful.rules.rules = {
     { rule_any = {type = { "normal", "dialog" }
       }, properties = { titlebars_enabled = false }
     },
+
+    -- Dropdown Terminal
+    { rule = { name = "scratchy" },
+          properties = { floating = true,
+                         --border_width = 0,
+                         ontop = true,
+                         focus = true,
+                         size_hints_honor = false } },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
     { rule = { class = "Firefox" },
