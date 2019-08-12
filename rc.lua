@@ -50,8 +50,8 @@ end
 beautiful.init(gears.filesystem.get_configuration_dir() .. "themes/solbn/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xterm" or "urxvtc"
-terminal_quake = terminal .. " -title scratchy" 
+terminal = "termite -t Terminal" or "xterm" or "urxvtc"
+terminal_quake = terminal .. " -t scratchy"
 editor = "vim" or os.getenv("EDITOR") or "nano"
 editor_cmd = terminal .. " -e " .. editor
 lock = "/home/ben/bin/lock.sh"
@@ -289,6 +289,7 @@ globalkeys = gears.table.join(
      awful.key({ modkey }, "b", function ()
        mouse.screen.mywibox.visible = not mouse.screen.mywibox.visible
      end),
+     awful.key({ modkey, "Shift" }, "f",  awful.client.floating.toggle ),
      -- Dropdown terminal
      awful.key({ modkey,          }, "asciicircum", function () dropdownterm(terminal_quake) end),
      -- Volume
