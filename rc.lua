@@ -347,9 +347,8 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
-              {description = "run prompt", group = "launcher"}),
-
+    --awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
+    --          {description = "run prompt", group = "launcher"}),
     --awful.key({ modkey }, "x",
     --          function ()
     --              awful.prompt.run {
@@ -360,6 +359,13 @@ globalkeys = gears.table.join(
     --              }
     --          end,
     --          {description = "lua execute prompt", group = "awesome"}),
+    -- rofi
+    awful.key({ modkey }, "r", function ()
+            os.execute(string.format("rofi -show %s -theme %s",
+            'run', 'dmenu'))
+        end,
+        {description = "show rofi", group = "launcher"}),
+    --
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"})
@@ -558,7 +564,10 @@ awful.rules.rules = {
     { rule = { name = "win81 (1) - Remote Viewer" },
       properties = { screen = 1, tag = "1" } },
     { rule = { name = "win81 (2) - Remote Viewer" },
-      properties = { screen = 2, tag = "1" } },
+      properties = { screen = screen.count(), tag = "1" } },
+    -- Virtual
+    { rule = { class = "Virt-manager" },
+      properties = { screen = 1, tag = "9" } },
 }
 -- }}}
 
