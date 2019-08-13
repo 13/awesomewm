@@ -15,7 +15,7 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Dropdown Terminal
-local dropdownterm = require("scratchdrop")
+local scratchdrop = require("scratchdrop")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
@@ -291,7 +291,7 @@ globalkeys = gears.table.join(
      end),
      awful.key({ modkey, "Shift" }, "f",  awful.client.floating.toggle ),
      -- Dropdown terminal
-     awful.key({ modkey,          }, "asciicircum", function () dropdownterm(terminal_quake) end),
+     awful.key({ modkey,          }, "asciicircum", function () scratchdrop(terminal_quake) end),
      -- Volume
      awful.key({ modkey }, "less",
        function ()
